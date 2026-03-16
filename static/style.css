@@ -41,6 +41,8 @@
     --danger-500: #ef4444;
     --danger-600: #dc2626;
     --danger-700: #b91c1c;
+    --danger-800: #991b1b;
+    --danger-900: #7f1d1d;
     
     /* Warning Colors - Amber */
     --warning-50: #fffbeb;
@@ -829,9 +831,27 @@ main {
     animation-delay: 0.8s;
 }
 
+.green-section .flag-item {
+    background: var(--primary-50);
+    border-color: var(--primary-200);
+}
+
+.green-section .flag-icon {
+    color: var(--primary-700);
+}
+
 .red-section {
     border-left: 4px solid var(--danger-500);
     animation-delay: 0.9s;
+}
+
+.red-section .flag-item {
+    background: var(--danger-50);
+    border-color: var(--danger-200);
+}
+
+.red-section .flag-icon {
+    color: var(--danger-700);
 }
 
 .section-title {
@@ -892,6 +912,7 @@ main {
 .flag-icon {
     font-size: 1.5rem;
     flex-shrink: 0;
+    color: var(--text-primary);
 }
 
 .flag-content {
@@ -900,7 +921,7 @@ main {
 
 .flag-title {
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--neutral-900);
     margin-bottom: var(--space-1);
     font-size: 1.0625rem;
 }
