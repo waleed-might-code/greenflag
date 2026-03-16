@@ -60,7 +60,7 @@ uploadForm.addEventListener('submit', async (e) => {
     // Show loading state
     analyzeBtn.disabled = true;
     analyzeBtn.querySelector('.btn-text').style.display = 'none';
-    analyzeBtn.querySelector('.btn-loader').style.display = 'inline';
+    analyzeBtn.querySelector('.btn-loader').style.display = 'flex';
     errorMessage.classList.remove('show');
     
     try {
