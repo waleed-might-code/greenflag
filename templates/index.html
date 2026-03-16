@@ -11,13 +11,17 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Flag Checker - Analyze Your Relationship</title>
+    <meta name="description" content="AI-powered relationship health analysis from your WhatsApp chats. Get instant insights into green flags, red flags, and personalized recommendations.">
+    <meta name="theme-color" content="#10b981">
+    <title>Green Flag Checker - Analyze Your Relationship Health</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">🚩</div>
+            <div class="logo" role="img" aria-label="Flag emoji">🚩</div>
             <h1>Green Flag Checker</h1>
             <p class="tagline">AI-powered relationship health analysis from your WhatsApp chats</p>
         </header>
@@ -32,14 +36,14 @@
                         <li>Get instant AI analysis of your relationship dynamics</li>
                     </ol>
                     <div class="privacy-note">
-                        <strong>🔒 Privacy:</strong> Your chat is analyzed securely and not stored permanently.
+                        <strong>🔒 Privacy First:</strong> Your chat is analyzed securely and not stored permanently. We respect your privacy.
                     </div>
                 </div>
 
                 <div class="upload-box">
                     <form id="uploadForm" enctype="multipart/form-data">
-                        <div class="drop-zone" id="dropZone">
-                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Drop zone for file upload">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="17 8 12 3 7 8"></polyline>
                                 <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -47,38 +51,41 @@
                             <p class="drop-text">Drop your WhatsApp .zip file here</p>
                             <p class="or-text">or</p>
                             <label for="fileInput" class="file-label">Choose File</label>
-                            <input type="file" id="fileInput" name="file" accept=".zip" required>
-                            <p class="file-name" id="fileName"></p>
+                            <input type="file" id="fileInput" name="file" accept=".zip" required aria-required="true">
+                            <p class="file-name" id="fileName" role="status" aria-live="polite"></p>
                         </div>
-                        <button type="submit" class="analyze-btn" id="analyzeBtn">
+                        <button type="submit" class="analyze-btn" id="analyzeBtn" aria-label="Analyze relationship">
                             <span class="btn-text">Analyze Relationship</span>
-                            <span class="btn-loader" style="display: none;">Analyzing...</span>
+                            <span class="btn-loader" style="display: none;" aria-live="polite">
+                                <div class="spinner" role="status" aria-label="Loading"></div>
+                                Analyzing...
+                            </span>
                         </button>
                     </form>
-                    <div class="error-message" id="errorMessage"></div>
+                    <div class="error-message" id="errorMessage" role="alert" aria-live="assertive"></div>
                 </div>
             </div>
 
             <div class="features">
                 <div class="feature">
-                    <div class="feature-icon">💚</div>
+                    <div class="feature-icon" role="img" aria-label="Green heart">💚</div>
                     <h3>Green Flags</h3>
-                    <p>Identify healthy communication patterns and positive behaviors</p>
+                    <p>Identify healthy communication patterns and positive behaviors in your relationship</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">🚨</div>
+                    <div class="feature-icon" role="img" aria-label="Warning sign">🚨</div>
                     <h3>Red Flags</h3>
-                    <p>Spot concerning patterns that may need attention</p>
+                    <p>Spot concerning patterns that may need attention or professional guidance</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">📊</div>
+                    <div class="feature-icon" role="img" aria-label="Chart">📊</div>
                     <h3>Health Score</h3>
-                    <p>Get an overall relationship health assessment</p>
+                    <p>Get an overall relationship health assessment based on communication patterns</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">💡</div>
+                    <div class="feature-icon" role="img" aria-label="Light bulb">💡</div>
                     <h3>Recommendations</h3>
-                    <p>Receive personalized advice for improvement</p>
+                    <p>Receive personalized advice for improvement and growth</p>
                 </div>
             </div>
         </main>
