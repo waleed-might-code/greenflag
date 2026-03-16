@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script data-pexo-debug>
+(function(){
+  window.__PEXO_ERRORS__=[];
+  window.onerror=function(m,s,l,c,e){window.__PEXO_ERRORS__.push({type:'error',msg:m,src:s,line:l,col:c});console.error('[PEXO]',m,s+':'+l);};
+  window.addEventListener('unhandledrejection',function(e){window.__PEXO_ERRORS__.push({type:'promise',msg:String(e.reason)});console.error('[PEXO] Unhandled:',e.reason);});
+  var _ce=console.error;console.error=function(){_ce.apply(console,arguments);window.__PEXO_ERRORS__.push({type:'console.error',msg:Array.from(arguments).join(' ')});};
+})();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - Green Flag Checker</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🚩</div>
+            <h1>Green Flag Checker</h1>
+            <a href="/" class="back-link">← Analyze Another Chat</a>
+        </header>
+
+        <main class="results-page">
+            <div class="verdict-card verdict-{{ analysis.overall_verdict }}">
+                <div class="verdict-icon">
+                    {% if analysis.overall_verdict == 'healthy' %}
+                        ✅
+                    {% elif analysis.overall_verdict == 'concerning' %}
+                        ⚠️
+                    {% else %}
+                        🚨
+                    {% endif %}
+                </div>
+                <h2 class="verdict-title">
+                    {% if analysis.overall_verdict == 'healthy' %}
+                        Healthy Relationship
+                    {% elif analysis.overall_verdict == 'concerning' %}
+                        Some Concerns Detected
+                    {% else %}
+                        Serious Concerns
+                    {% endif %}
+                </h2>
+                <div class="health-score">
+                    <div class="score-circle">
+                        <span class="score-number">{{ analysis.health_score }}</span>
+                        <span class="score-label">/100</span>
+                    </div>
+                </div>
+                <p class="verdict-summary">{{ analysis.summary }}</p>
+                <div class="meta-info">
+                    <span>📊 {{ analysis.message_count }} messages analyzed</span>
+                    <span>👥 {{ analysis.participants|length }} participants</span>
+                </div>
+            </div>
+
+            {% if analysis.green_flags %}
+            <section class="flags-section green-section">
+                <h2 class="section-title">💚 Green Flags ({{ analysis.green_flags|length }})</h2>
+                <div class="flags-grid">
+                    {% for flag in analysis.green_flags %}
+                    <div class="flag-card green-flag">
+                        <h3 class="flag-title">{{ flag.title }}</h3>
+                        <p class="flag-description">{{ flag.description }}</p>
+                        {% if flag.examples %}
+                        <div class="flag-examples">
+                            <strong>Examples:</strong>
+                            <ul>
+                                {% for example in flag.examples %}
+                                <li>"{{ example }}"</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if analysis.red_flags %}
+            <section class="flags-section red-section">
+                <h2 class="section-title">🚨 Red Flags ({{ analysis.red_flags|length }})</h2>
+                <div class="flags-grid">
+                    {% for flag in analysis.red_flags %}
+                    <div class="flag-card red-flag">
+                        <h3 class="flag-title">{{ flag.title }}</h3>
+                        <p class="flag-description">{{ flag.description }}</p>
+                        {% if flag.examples %}
+                        <div class="flag-examples">
+                            <strong>Examples:</strong>
+                            <ul>
+                                {% for example in flag.examples %}
+                                <li>"{{ example }}"</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if analysis.recommendations %}
+            <section class="recommendations-section">
+                <h2 class="section-title">💡 Recommendations</h2>
+                <div class="recommendations-list">
+                    {% for rec in analysis.recommendations %}
+                    <div class="recommendation-item">
+                        <span class="rec-bullet">→</span>
+                        <p>{{ rec }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <div class="share-section">
+                <p class="share-label">Share this analysis:</p>
+                <div class="share-url">
+                    <input type="text" id="shareUrl" value="{{ request.url }}" readonly>
+                    <button onclick="copyUrl()" class="copy-btn">Copy Link</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by AI • Made with care for healthy relationships</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyUrl() {
+            const input = document.getElementById('shareUrl');
+            input.select();
+            document.execCommand('copy');
+            const btn = event.target;
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy Link', 2000);
+        }
+    </script>
+</body>
+</html>

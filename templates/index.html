@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script data-pexo-debug>
+(function(){
+  window.__PEXO_ERRORS__=[];
+  window.onerror=function(m,s,l,c,e){window.__PEXO_ERRORS__.push({type:'error',msg:m,src:s,line:l,col:c});console.error('[PEXO]',m,s+':'+l);};
+  window.addEventListener('unhandledrejection',function(e){window.__PEXO_ERRORS__.push({type:'promise',msg:String(e.reason)});console.error('[PEXO] Unhandled:',e.reason);});
+  var _ce=console.error;console.error=function(){_ce.apply(console,arguments);window.__PEXO_ERRORS__.push({type:'console.error',msg:Array.from(arguments).join(' ')});};
+})();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Flag Checker - Analyze Your Relationship</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🚩</div>
+            <h1>Green Flag Checker</h1>
+            <p class="tagline">AI-powered relationship health analysis from your WhatsApp chats</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="instructions">
+                    <h2>How it works</h2>
+                    <ol>
+                        <li>Export your WhatsApp chat (without media)</li>
+                        <li>Upload the .zip file here</li>
+                        <li>Get instant AI analysis of your relationship dynamics</li>
+                    </ol>
+                    <div class="privacy-note">
+                        <strong>🔒 Privacy:</strong> Your chat is analyzed securely and not stored permanently.
+                    </div>
+                </div>
+
+                <div class="upload-box">
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="drop-zone" id="dropZone">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p class="drop-text">Drop your WhatsApp .zip file here</p>
+                            <p class="or-text">or</p>
+                            <label for="fileInput" class="file-label">Choose File</label>
+                            <input type="file" id="fileInput" name="file" accept=".zip" required>
+                            <p class="file-name" id="fileName"></p>
+                        </div>
+                        <button type="submit" class="analyze-btn" id="analyzeBtn">
+                            <span class="btn-text">Analyze Relationship</span>
+                            <span class="btn-loader" style="display: none;">Analyzing...</span>
+                        </button>
+                    </form>
+                    <div class="error-message" id="errorMessage"></div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">💚</div>
+                    <h3>Green Flags</h3>
+                    <p>Identify healthy communication patterns and positive behaviors</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚨</div>
+                    <h3>Red Flags</h3>
+                    <p>Spot concerning patterns that may need attention</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Health Score</h3>
+                    <p>Get an overall relationship health assessment</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💡</div>
+                    <h3>Recommendations</h3>
+                    <p>Receive personalized advice for improvement</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by AI • Made with care for healthy relationships</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
