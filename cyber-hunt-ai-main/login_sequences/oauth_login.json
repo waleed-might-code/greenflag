@@ -1,0 +1,103 @@
+{
+  "name": "oauth_login_example",
+  "role": "user",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com/login",
+      "timeout_ms": 30000,
+      "description": "Navigate to login page",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "click",
+      "selector": "button[data-provider='google']",
+      "timeout_ms": 5000,
+      "description": "Click Google OAuth button",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "wait_for_url",
+      "value": "**/accounts.google.com/**",
+      "timeout_ms": 10000,
+      "description": "Wait for Google OAuth page",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "fill",
+      "selector": "input[type='email']",
+      "value_ref": "{{username}}",
+      "timeout_ms": 5000,
+      "description": "Fill Google email",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "click",
+      "selector": "#identifierNext",
+      "timeout_ms": 5000,
+      "description": "Click Next",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "wait_for_selector",
+      "selector": "input[type='password']",
+      "timeout_ms": 10000,
+      "description": "Wait for password field",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "fill",
+      "selector": "input[type='password']",
+      "value_ref": "{{password}}",
+      "timeout_ms": 5000,
+      "description": "Fill Google password",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "click",
+      "selector": "#passwordNext",
+      "timeout_ms": 5000,
+      "description": "Click Sign In",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "wait_for_url",
+      "value": "**/example.com/**",
+      "timeout_ms": 20000,
+      "description": "Wait for redirect back to app",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "extract_cookies",
+      "description": "Extract session cookies",
+      "required": true,
+      "retry_count": 0
+    }
+  ],
+  "success_indicators": [
+    {
+      "type": "url_contains",
+      "value": "example.com"
+    },
+    {
+      "type": "selector_exists",
+      "value": "[data-authenticated='true']"
+    }
+  ],
+  "created_at": "2024-01-15T10:00:00Z",
+  "updated_at": "2024-01-15T10:00:00Z",
+  "metadata": {
+    "description": "OAuth login via Google",
+    "oauth_provider": "google",
+    "tested": false
+  }
+}

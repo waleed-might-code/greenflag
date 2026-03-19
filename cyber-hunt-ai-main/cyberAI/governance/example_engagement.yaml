@@ -1,0 +1,87 @@
+"""
+Example engagement configurations for common scenarios.
+"""
+
+engagement_id: "550e8400-e29b-41d4-a716-446655440000"
+name: "Example Web Application Security Test"
+
+# Target domains - all requests must be to these domains or their subdomains
+target_domains:
+  - "https://target.example.com"
+  - "https://api.target.example.com"
+
+# Out-of-scope patterns (glob or regex)
+out_of_scope_patterns:
+  - "*/logout"
+  - "*/delete/*"
+  - "*.staging.*"
+  - "*/admin/users/delete"
+
+# Allowed URL schemes
+allowed_schemes:
+  - "https"
+  - "http"
+
+# Test identities for multi-role testing
+test_identities:
+  - role: "admin"
+    credentials:
+      type: "form_replay"
+      username: "admin@example.com"
+      password: "REDACTED"
+    login_sequence:
+      - action: "navigate"
+        url: "https://target.example.com/login"
+      - action: "fill"
+        selector: "input[name='email']"
+        value: "admin@example.com"
+      - action: "fill"
+        selector: "input[name='password']"
+        value: "REDACTED"
+      - action: "click"
+        selector: "button[type='submit']"
+      - action: "wait"
+        seconds: 2
+    session_check_url: "https://target.example.com/api/me"
+  
+  - role: "user"
+    credentials:
+      type: "form_replay"
+      username: "user@example.com"
+      password: "REDACTED"
+    login_sequence:
+      - action: "navigate"
+        url: "https://target.example.com/login"
+      - action: "fill"
+        selector: "input[name='email']"
+        value: "user@example.com"
+      - action: "fill"
+        selector: "input[name='password']"
+        value: "REDACTED"
+      - action: "click"
+        selector: "button[type='submit']"
+    session_check_url: "https://target.example.com/api/me"
+  
+  - role: "guest"
+    credentials:
+      type: "none"
+
+# Rate limiting configuration
+rate_limits:
+  per_host_rps: 10  # Max 10 requests per second per host
+  global_rps: 50    # Max 50 requests per second globally
+  backoff_on_5xx: "exponential"  # exponential, linear, none
+
+# Data retention and privacy
+data_retention:
+  raw_capture_ttl_days: 90      # Keep raw WARC captures for 90 days
+  structured_ttl_days: 365      # Keep structured data for 1 year
+  permitted_data_classes:
+    - "request_response_meta"   # Status, headers, timing
+    - "finding_evidence"        # Evidence for confirmed findings
+    - "insertion_point_schema"  # Parameter schemas
+
+# Incident contacts
+incident_contacts:
+  - "security@client.com"
+  - "devops@client.com"

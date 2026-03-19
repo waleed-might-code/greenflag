@@ -1,0 +1,35 @@
+# Core dependencies
+playwright==1.41.0
+httpx==0.26.0
+beautifulsoup4==4.12.3
+lxml==5.1.0
+pydantic==2.6.0
+python-dotenv==1.0.1
+loguru==0.7.2
+
+# Data pipeline
+kafka-python==2.0.2
+psycopg2-binary==2.9.9
+sqlalchemy==2.0.25
+redis==5.0.1
+
+# Storage and serialization
+warcio==1.7.4
+msgpack==1.0.7
+orjson==3.9.12
+
+# Analysis and ML
+scikit-learn==1.4.0
+numpy==1.26.3
+simhash==2.1.2
+
+# API and GraphQL
+openapi-spec-validator==0.7.1
+gql==3.5.0
+graphql-core==3.2.3
+
+# Utilities
+tldextract==5.1.1
+urllib3==2.1.0
+aiofiles==23.2.1
+tenacity==8.2.3

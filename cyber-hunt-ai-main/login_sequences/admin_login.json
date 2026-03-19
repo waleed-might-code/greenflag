@@ -1,0 +1,86 @@
+{
+  "name": "admin_login_example",
+  "role": "admin",
+  "steps": [
+    {
+      "action": "navigate",
+      "url": "https://example.com/login",
+      "timeout_ms": 30000,
+      "description": "Navigate to login page",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "wait_for_selector",
+      "selector": "input[name='email']",
+      "timeout_ms": 10000,
+      "description": "Wait for email field",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "fill",
+      "selector": "input[name='email']",
+      "value_ref": "{{username}}",
+      "timeout_ms": 5000,
+      "description": "Fill email field",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "fill",
+      "selector": "input[name='password']",
+      "value_ref": "{{password}}",
+      "timeout_ms": 5000,
+      "description": "Fill password field",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "click",
+      "selector": "button[type='submit']",
+      "timeout_ms": 5000,
+      "description": "Click login button",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "wait_for_url",
+      "value": "**/dashboard**",
+      "timeout_ms": 15000,
+      "description": "Wait for redirect to dashboard",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "assert_url",
+      "expected": "/dashboard",
+      "description": "Verify we're on dashboard",
+      "required": true,
+      "retry_count": 0
+    },
+    {
+      "action": "extract_cookies",
+      "description": "Extract session cookies",
+      "required": true,
+      "retry_count": 0
+    }
+  ],
+  "success_indicators": [
+    {
+      "type": "url_contains",
+      "value": "/dashboard"
+    },
+    {
+      "type": "selector_exists",
+      "value": "[data-testid='user-menu']"
+    }
+  ],
+  "created_at": "2024-01-15T10:00:00Z",
+  "updated_at": "2024-01-15T10:00:00Z",
+  "metadata": {
+    "description": "Standard admin login flow",
+    "tested": true,
+    "success_rate": 0.95
+  }
+}

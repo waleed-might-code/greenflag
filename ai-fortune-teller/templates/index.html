@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script data-pexo-debug>
+(function(){
+  window.__PEXO_ERRORS__=[];
+  window.onerror=function(m,s,l,c,e){window.__PEXO_ERRORS__.push({type:'error',msg:m,src:s,line:l,col:c});console.error('[PEXO]',m,s+':'+l);};
+  window.addEventListener('unhandledrejection',function(e){window.__PEXO_ERRORS__.push({type:'promise',msg:String(e.reason)});console.error('[PEXO] Unhandled:',e.reason);});
+  var _ce=console.error;console.error=function(){_ce.apply(console,arguments);window.__PEXO_ERRORS__.push({type:'console.error',msg:Array.from(arguments).join(' ')});};
+})();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fortune Teller 🔮</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px rgba(139, 92, 246, 0.6),
+                         0 0 80px rgba(139, 92, 246, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 40px rgba(139, 92, 246, 0.6), 0 0 80px rgba(139, 92, 246, 0.3); }
+            to { text-shadow: 0 0 60px rgba(139, 92, 246, 0.8), 0 0 100px rgba(139, 92, 246, 0.5); }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 3rem;
+        }
+        
+        .input-area {
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-area:focus-within {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 10px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+        
+        textarea:focus {
+            outline: none;
+        }
+        
+        textarea::placeholder {
+            color: #666;
+        }
+        
+        .analyze-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .analyze-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+        }
+        
+        .analyze-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .analyze-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+        
+        .analyze-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: #111;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            border: 1px solid #222;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: #fff;
+        }
+        
+        .result-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 4px solid #8b5cf6;
+            transition: transform 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .fortune-title {
+            font-size: 2rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #8b5cf6;
+        }
+        
+        .share-btn {
+            background: #1a1a1a;
+            color: #8b5cf6;
+            border: 2px solid #8b5cf6;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .share-btn:hover {
+            background: #8b5cf6;
+            color: #0a0a0a;
+        }
+        
+        .error {
+            color: #ef4444;
+            background: #1a0a0a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 AI Fortune Teller</h1>
+        <p class="subtitle">Ask the cosmos anything</p>
+        
+        <div class="input-area">
+            <textarea id="questionInput" placeholder="What does the future hold for me?"></textarea>
+        </div>
+        
+        <button class="analyze-btn" id="analyzeBtn">Reveal My Fortune 🔮</button>
+        
+        <div id="error" class="error" style="display: none;"></div>
+    </div>
+    
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeBtn">&times;</button>
+            <div id="resultContent"></div>
+            <button class="share-btn" id="shareBtn">📸 Share Fortune</button>
+        </div>
+    </div>
+    
+    <script>
+        const questionInput = document.getElementById('questionInput');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resultModal = document.getElementById('resultModal');
+        const closeBtn = document.getElementById('closeBtn');
+        const resultContent = document.getElementById('resultContent');
+        const shareBtn = document.getElementById('shareBtn');
+        const errorDiv = document.getElementById('error');
+        
+        analyzeBtn.addEventListener('click', async () => {
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                errorDiv.textContent = '❌ Please ask a question';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            analyzeBtn.disabled = true;
+            analyzeBtn.classList.add('loading');
+            errorDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({question})
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Fortune telling failed');
+                }
+                
+                displayResult(data.fortune);
+                resultModal.classList.add('show');
+                
+            } catch (error) {
+                errorDiv.textContent = `❌ ${error.message}`;
+                errorDiv.style.display = 'block';
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.classList.remove('loading');
+            }
+        });
+        
+        function displayResult(fortune) {
+            resultContent.innerHTML = `
+                <div class="fortune-title">🔮 Your Fortune 🔮</div>
+                <div class="result-card">
+                    <pre style="white-space: pre-wrap; font-family: inherit; line-height: 1.8;">${fortune}</pre>
+                </div>
+            `;
+        }
+        
+        closeBtn.addEventListener('click', () => {
+            resultModal.classList.remove('show');
+        });
+        
+        resultModal.addEventListener('click', (e) => {
+            if (e.target === resultModal) {
+                resultModal.classList.remove('show');
+            }
+        });
+        
+        shareBtn.addEventListener('click', () => {
+            alert('📸 Screenshot this fortune to share!');
+        });
+    </script>
+</body>
+</html>

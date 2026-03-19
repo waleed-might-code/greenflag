@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script data-pexo-debug>
+(function(){
+  window.__PEXO_ERRORS__=[];
+  window.onerror=function(m,s,l,c,e){window.__PEXO_ERRORS__.push({type:'error',msg:m,src:s,line:l,col:c});console.error('[PEXO]',m,s+':'+l);};
+  window.addEventListener('unhandledrejection',function(e){window.__PEXO_ERRORS__.push({type:'promise',msg:String(e.reason)});console.error('[PEXO] Unhandled:',e.reason);});
+  var _ce=console.error;console.error=function(){_ce.apply(console,arguments);window.__PEXO_ERRORS__.push({type:'console.error',msg:Array.from(arguments).join(' ')});};
+})();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zip File Host</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f8f9ff;
+        }
+        
+        .upload-area.dragover {
+            background: #f0f0ff;
+            border-color: #764ba2;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .upload-hint {
+            color: #999;
+            font-size: 13px;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f9ff;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .download-url {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 13px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .copy-btn:hover {
+            background: #764ba2;
+        }
+        
+        .error {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #fee;
+            border-radius: 8px;
+            color: #c33;
+            font-size: 14px;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Zip File Host</h1>
+        <p class="subtitle">Upload your zip file and get a shareable download link</p>
+        
+        <form id="uploadForm">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Click to select or drag & drop</div>
+                <div class="upload-hint">Only .zip files (max 50MB)</div>
+                <input type="file" id="fileInput" name="file" accept=".zip" required>
+            </div>
+            <button type="submit" class="btn" id="uploadBtn">Upload File</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #667eea;">Uploading...</p>
+        </div>
+        
+        <div class="error" id="error"></div>
+        
+        <div class="result" id="result">
+            <div class="result-title">✅ File uploaded successfully!</div>
+            <p style="color: #666; font-size: 13px; margin-bottom: 10px;">Share this download link:</p>
+            <div class="download-url" id="downloadUrl"></div>
+            <button class="copy-btn" onclick="copyUrl()">Copy Link</button>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const error = document.getElementById('error');
+        const downloadUrl = document.getElementById('downloadUrl');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const filename = files[0].name;
+                uploadArea.querySelector('.upload-text').textContent = filename;
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const filename = e.target.files[0].name;
+                uploadArea.querySelector('.upload-text').textContent = filename;
+            }
+        });
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const file = fileInput.files[0];
+            if (!file) {
+                showError('Please select a file');
+                return;
+            }
+
+            if (!file.name.endsWith('.zip')) {
+                showError('Only .zip files are allowed');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            loading.classList.add('show');
+            uploadBtn.disabled = true;
+            result.classList.remove('show');
+            error.classList.remove('show');
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    downloadUrl.textContent = data.download_url;
+                    result.classList.add('show');
+                } else {
+                    showError(data.error || 'Upload failed');
+                }
+            } catch (err) {
+                showError('Network error. Please try again.');
+            } finally {
+                loading.classList.remove('show');
+                uploadBtn.disabled = false;
+            }
+        });
+
+        function showError(message) {
+            error.textContent = message;
+            error.classList.add('show');
+        }
+
+        function copyUrl() {
+            const url = downloadUrl.textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script data-pexo-debug>
+(function(){
+  window.__PEXO_ERRORS__=[];
+  window.onerror=function(m,s,l,c,e){window.__PEXO_ERRORS__.push({type:'error',msg:m,src:s,line:l,col:c});console.error('[PEXO]',m,s+':'+l);};
+  window.addEventListener('unhandledrejection',function(e){window.__PEXO_ERRORS__.push({type:'promise',msg:String(e.reason)});console.error('[PEXO] Unhandled:',e.reason);});
+  var _ce=console.error;console.error=function(){_ce.apply(console,arguments);window.__PEXO_ERRORS__.push({type:'console.error',msg:Array.from(arguments).join(' ')});};
+})();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 80px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .greeting {
+            font-size: 1.5em;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        
+        .time-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .time-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .time {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .emoji {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: wave 2s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(20deg);
+            }
+            75% {
+                transform: rotate(-20deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello World!</h1>
+        <div class="emoji">👋</div>
+        <p class="greeting">Welcome to this simple Flask application</p>
+        <div class="time-container">
+            <div class="time-label">Current Time</div>
+            <div class="time">{{ current_time }}</div>
+        </div>
+    </div>
+</body>
+</html>

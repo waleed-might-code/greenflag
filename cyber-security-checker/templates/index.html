@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script data-pexo-debug>
+(function(){
+  window.__PEXO_ERRORS__=[];
+  window.onerror=function(m,s,l,c,e){window.__PEXO_ERRORS__.push({type:'error',msg:m,src:s,line:l,col:c});console.error('[PEXO]',m,s+':'+l);};
+  window.addEventListener('unhandledrejection',function(e){window.__PEXO_ERRORS__.push({type:'promise',msg:String(e.reason)});console.error('[PEXO] Unhandled:',e.reason);});
+  var _ce=console.error;console.error=function(){_ce.apply(console,arguments);window.__PEXO_ERRORS__.push({type:'console.error',msg:Array.from(arguments).join(' ')});};
+})();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Security Score Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-group input::placeholder {
+            color: #64748b;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 2px solid;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 8px solid;
+            position: relative;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .verdict {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .details {
+            margin-top: 20px;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+        }
+
+        .detail-section ul {
+            list-style: none;
+        }
+
+        .detail-section li {
+            padding: 8px 0;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .detail-section li:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            font-size: 1.2rem;
+        }
+
+        .error {
+            color: #ef4444;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+            
+            .score-circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .score-value {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Cyber Security Score</h1>
+            <p>How hackable is your username?</p>
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <label for="username">Enter Your Username or Email</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="e.g., john_doe123"
+                    maxlength="50"
+                >
+            </div>
+
+            <button class="btn" id="analyzeBtn">Analyze Security</button>
+
+            <div class="error" id="error"></div>
+
+            <div class="result" id="result">
+                <div class="score-circle" id="scoreCircle">
+                    <div class="score-value" id="scoreValue">0</div>
+                    <div class="score-label">SCORE</div>
+                </div>
+
+                <div class="verdict" id="verdict"></div>
+                <div class="message" id="message"></div>
+
+                <div class="details">
+                    <div class="detail-section">
+                        <h3>⚠️ Security Risks</h3>
+                        <ul id="risks"></ul>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>✅ Strengths</h3>
+                        <ul id="strengths"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const usernameInput = document.getElementById('username');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const result = document.getElementById('result');
+        const error = document.getElementById('error');
+        const scoreCircle = document.getElementById('scoreCircle');
+        const scoreValue = document.getElementById('scoreValue');
+        const verdict = document.getElementById('verdict');
+        const message = document.getElementById('message');
+        const risksList = document.getElementById('risks');
+        const strengthsList = document.getElementById('strengths');
+
+        function showError(msg) {
+            error.textContent = msg;
+            error.classList.add('show');
+            setTimeout(() => error.classList.remove('show'), 3000);
+        }
+
+        function animateScore(target) {
+            let current = 0;
+            const increment = target / 30;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                scoreValue.textContent = Math.round(current);
+            }, 20);
+        }
+
+        async function analyzeUsername() {
+            const username = usernameInput.value.trim();
+            
+            if (!username) {
+                showError('Please enter a username');
+                return;
+            }
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = 'Analyzing...';
+            result.classList.remove('show');
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.error || 'Analysis failed');
+                    return;
+                }
+
+                // Update UI with results
+                scoreCircle.style.borderColor = data.color;
+                result.style.borderColor = data.color;
+                verdict.textContent = data.verdict;
+                verdict.style.color = data.color;
+                message.textContent = data.message;
+
+                // Populate risks
+                risksList.innerHTML = '';
+                data.risks.forEach(risk => {
+                    const li = document.createElement('li');
+                    li.textContent = risk;
+                    risksList.appendChild(li);
+                });
+
+                // Populate strengths
+                strengthsList.innerHTML = '';
+                data.strengths.forEach(strength => {
+                    const li = document.createElement('li');
+                    li.textContent = strength;
+                    strengthsList.appendChild(li);
+                });
+
+                // Animate score
+                animateScore(data.score);
+
+                // Show result
+                result.classList.add('show');
+
+            } catch (err) {
+                showError('Network error. Please try again.');
+                console.error(err);
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = 'Analyze Security';
+            }
+        }
+
+        analyzeBtn.addEventListener('click', analyzeUsername);
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') analyzeUsername();
+        });
+    </script>
+</body>
+</html>
